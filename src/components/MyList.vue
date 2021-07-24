@@ -8,26 +8,28 @@
 <template>
   <div id="myList" class="myList">
     <ul>
-      <li v-for="item in list" :key="item.product_id">
+      <li v-for="item in list" :key="item.categoryId">
         <el-popover placement="top">
           <p>确定删除吗？</p>
           <div style="text-align: right; margin: 10px 0 0">
-            <el-button type="primary" size="mini" @click="deleteCollect(item.product_id)">确定</el-button>
+            <el-button type="primary" size="mini" @click="deleteCollect(item.categoryId)">确定</el-button>
           </div>
           <i class="el-icon-close delete" slot="reference" v-show="isDelete"></i>
         </el-popover>
-        <router-link :to="{ path: '/goods/details', query: {productID:item.product_id} }">
-          <img :src="$target +item.product_picture" alt />
-          <h2>{{item.product_name}}</h2>
-          <h3>{{item.product_title}}</h3>
+            <el-image 
+                  style="width: 160px; height: 160px;margin: 0 auto;    display: block;"
+                  :src="item.pic" 
+                  :preview-src-list="item.picList">
+                </el-image>
+          <h2>{{item.categoryName}}</h2>
+          <h3>{{item.description}}</h3>
           <p>
-            <span>{{item.product_selling_price}}元</span>
+            <span>{{item.price}}元</span>
             <span
-              v-show="item.product_price != item.product_selling_price"
+              v-show="item.price != item.originPrice"
               class="del"
-            >{{item.product_price}}元</span>
+            >{{item.originPrice}}元</span>
           </p>
-        </router-link>
       </li>
       <li v-show="isMore && list.length>=1" id="more">
         <router-link :to="{ path: '/goods', query: {categoryID:categoryID} }">
@@ -106,14 +108,6 @@ export default {
   background-color: white;
   -webkit-transition: all 0.2s linear;
   transition: all 0.2s linear;
-  position: relative;
-}
-.myList ul li:hover {
-  z-index: 2;
-  -webkit-box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
-  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
-  -webkit-transform: translate3d(0, -2px, 0);
-  transform: translate3d(0, -2px, 0);
 }
 .myList ul li img {
   display: block;

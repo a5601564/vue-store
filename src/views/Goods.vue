@@ -19,22 +19,6 @@
     </div>
     <!-- 面包屑END -->
 
-    <!-- 分类标签 -->
-    <div class="nav">
-      <div class="product-nav">
-        <div class="title">分类</div>
-        <el-tabs v-model="activeName" type="card">
-          <el-tab-pane
-            v-for="item in categoryList"
-            :key="item.category_id"
-            :label="item.category_name"
-            :name="''+item.category_id"
-          />
-        </el-tabs>
-      </div>
-    </div>
-    <!-- 分类标签END -->
-
     <!-- 主要内容区 -->
     <div class="main">
       <div class="list">
@@ -57,6 +41,9 @@
   </div>
 </template>
 <script>
+import {list} from '@/api/pms/spu'
+// import {list as categoryList} from '@/api/pms/category'
+
 export default {
   data() {
     return {
@@ -183,23 +170,34 @@ export default {
     // 向后端请求全部商品或分类商品数据
     getData() {
       // 如果分类列表为空则请求全部商品数据，否则请求分类商品数据
-      const api =
-        this.categoryID.length == 0
-          ? "/api/product/getAllProduct"
-          : "/api/product/getProductByCategory";
-      this.$axios
-        .post(api, {
-          categoryID: this.categoryID,
-          currentPage: this.currentPage,
-          pageSize: this.pageSize
-        })
-        .then(res => {
-          this.product = res.data.Product;
-          this.total = res.data.total;
-        })
-        .catch(err => {
-          return Promise.reject(err);
+      let query = {
+        "queryMode": "page",
+        "page" : 1,
+        "limit" : 10,
+      }
+
+      list(query).then(res => {
+            this.product = res.data;
+            this.total = res.data.total;
         });
+
+      // const api =
+      //   this.categoryID.length == 0
+      //     ? "/api/product/getAllProduct"
+      //     : "/api/product/getProductByCategory";
+      // this.$axios
+      //   .post(api, {
+      //     categoryID: this.categoryID,
+      //     currentPage: this.currentPage,
+      //     pageSize: this.pageSize
+      //   })
+      //   .then(res => {
+      //     this.product = res.data.Product;
+      //     this.total = res.data.total;
+      //   })
+      //   .catch(err => {
+      //     return Promise.reject(err);
+      //   });
     },
     // 通过搜索条件向后端请求商品数据
     getProductBySearch() {

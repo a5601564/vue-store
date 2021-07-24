@@ -27,7 +27,6 @@ Axios.interceptors.request.use(
   },
   error => {
     // 跳转error页面
-    router.push({ path: "/error" });
     return Promise.reject(error);
   }
 );
@@ -44,13 +43,11 @@ Axios.interceptors.response.use(
     if (res.data.code === "500") {
       // 500表示服务器异常
       // 跳转error页面
-      router.push({ path: "/error" });
     }
     return res;
   },
   error => {
     // 跳转error页面
-    router.push({ path: "/error" });
     return Promise.reject(error);
   }
 );
